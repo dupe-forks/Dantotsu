@@ -159,9 +159,21 @@ data class Lazier<T>(
 
 
 fun <T> lazyList(vararg objects: Pair<String, () -> T>): List<Lazier<T>> {
-    return objects.map {
-        Lazier(it.second, it.first)
+    // Bubble Sort to sort the objects by the String keys alphabetically
+    val sortedObjects = objects.toMutableList()
+    for (i in 0 until sortedObjects.size) {
+        for (j in 0 until sortedObjects.size - 1 - i) {
+            if (sortedObjects[j].first > sortedObjects[j + 1].first) {
+                // Swap elements if they're out of order
+                val temp = sortedObjects[j]
+                sortedObjects[j] = sortedObjects[j + 1]
+                sortedObjects[j + 1] = temp
+            }
+        }
     }
+    
+    // Map the sorted objects to Lazier instances
+    return sortedObjects.map { Lazier(it.second, it.first) }
 }
 
 
